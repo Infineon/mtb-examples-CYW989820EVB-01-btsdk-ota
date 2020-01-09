@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -85,6 +85,7 @@
 #include "wiced_bt_app_common.h"
 #endif
 #include "string.h"
+#include "wiced_hal_puart.h"
 
 /******************************************************************************
  *                                Constants
@@ -223,17 +224,15 @@ extern const wiced_bt_cfg_buf_pool_t app_buf_pools[];
  *  stack initialization.  The actual application initialization will happen
  *  when stack reports that BT device is ready.
  */
-#ifdef CYW20735B0
-void application_start(void)
-#else
 APPLICATION_START()
-#endif
 {
     wiced_transport_init(&transport_cfg);
 #ifdef WICED_BT_TRACE_ENABLE
     // Use default baud rate of 115200 for PUART
     wiced_set_debug_uart( WICED_ROUTE_DEBUG_TO_PUART );
-//    wiced_hal_puart_select_uart_pads( WICED_PUART_RXD, WICED_PUART_TXD, 0, 0);
+#ifdef CYW20706A2
+    wiced_hal_puart_select_uart_pads( WICED_PUART_RXD, WICED_PUART_TXD, 0, 0);
+#endif
 
 //    wiced_set_debug_uart(WICED_ROUTE_DEBUG_TO_WICED_UART);
 #endif
